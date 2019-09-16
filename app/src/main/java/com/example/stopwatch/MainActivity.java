@@ -57,18 +57,19 @@ public class MainActivity extends AppCompatActivity {
             // set the chronometer's base to that value
             // start the chronometer
 
-        // next functionalityr would be to also store in the bundle
+        // next functionality would be to also store in the bundle
         // whether it was running or stopped
 
         if(savedInstanceState != null){
             if(timer.getBase() != 0){
                 timer.setBase(savedInstanceState.getLong(KEY_CHRONOMETER_BASE));
                 time = savedInstanceState.getLong(KEY_CHRONOMETER_TIME);
+                timer.setText(savedInstanceState.getString(KEY_CHRONOMETER_TEXT));
             }
-            timer.setBase(savedInstanceState.getLong(KEY_CHRONOMETER_BASE));
+
             running = savedInstanceState.getBoolean(KEY_CHRONOMETER_RUNNING);
             start_stop.setText(savedInstanceState.getString(KEY_BUTTON_TEXT));
-            //timer.setText(savedInstanceState.getString(KEY_BUTTON_TEXT));
+
 
             if(running){
                 timer.start();
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putString(KEY_BUTTON_TEXT, String.valueOf(start_stop.getText()));
         outState.putBoolean(KEY_CHRONOMETER_RUNNING, running);
         outState.putLong(KEY_CHRONOMETER_TIME, time);
-        //outState.putLong(KEY_CHRONOMETER_TIME, );
+        outState.putString(KEY_CHRONOMETER_TEXT, String.valueOf(timer.getText()));
 
     }
 }
