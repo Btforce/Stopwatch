@@ -1,5 +1,6 @@
 package com.example.stopwatch;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -19,7 +20,11 @@ public class MainActivity extends AppCompatActivity {
     private long time = 0;
 
     public static final String TAG = MainActivity.class.getSimpleName();
-
+    public static final String KEY_CHRONOMETER_BASE = "chronometer base";
+    public static final String KEY_CHRONOMETER_RUNNING = "running";
+    public static final String KEY_CHRONOMETER_TIME = "time";
+    public static final String KEY_BUTTON_TEXT = "stop_start";
+    public static final String KEY_CHRONOMETER_TEXT = "chronometer time display";
     //look up the Log class for android
     //list all the levels of logging and when they're used
 
@@ -46,6 +51,29 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: ");
         wireWidgets();
         setListeners();
+
+        // if the savedInstanceState isn't null
+            // pull out the value of the base that we saved from the Bundle
+            // set the chronometer's base to that value
+            // start the chronometer
+
+        // next functionalityr would be to also store in the bundle
+        // whether it was running or stopped
+
+        if(savedInstanceState != null){
+            if(timer.getBase() != 0){
+                timer.setBase(savedInstanceState.getLong(KEY_CHRONOMETER_BASE));
+                time = savedInstanceState.getLong(KEY_CHRONOMETER_TIME);
+            }
+            timer.setBase(savedInstanceState.getLong(KEY_CHRONOMETER_BASE));
+            running = savedInstanceState.getBoolean(KEY_CHRONOMETER_RUNNING);
+            start_stop.setText(savedInstanceState.getString(KEY_BUTTON_TEXT));
+            //timer.setText(savedInstanceState.getString(KEY_BUTTON_TEXT));
+
+            if(running){
+                timer.start();
+            }
+        }
     }
 
     private void setListeners() {
@@ -61,13 +89,13 @@ public class MainActivity extends AppCompatActivity {
 
                     timer.setBase(SystemClock.elapsedRealtime() - time + timer.getBase());
                     timer.start();
-                    start_stop.setText("Pause");
+                    start_stop.setText(getString(R.string.main_stop));
                     running = true;
                 }
                 else{
                     time = SystemClock.elapsedRealtime();
                     timer.stop();
-                    start_stop.setText("Start");
+                    start_stop.setText(getString(R.string.main_start));
                     running = false;
 
                 }
@@ -79,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 timer.setBase(SystemClock.elapsedRealtime());
                 timer.stop();
-                start_stop.setText("Start");
+                start_stop.setText((getString(R.string.main_start)));
                 running = false;
                 time = SystemClock.elapsedRealtime();
 
@@ -135,4 +163,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     //activity is finished
+
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(KEY_CHRONOMETER_BASE , timer.getBase());
+        outState.putString(KEY_BUTTON_TEXT, String.valueOf(start_stop.getText()));
+        outState.putBoolean(KEY_CHRONOMETER_RUNNING, running);
+        outState.putLong(KEY_CHRONOMETER_TIME, time);
+        //outState.putLong(KEY_CHRONOMETER_TIME, );
+
+    }
 }
