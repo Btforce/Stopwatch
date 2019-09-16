@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
                 time = savedInstanceState.getLong(KEY_CHRONOMETER_TIME);
                 timer.setText(savedInstanceState.getString(KEY_CHRONOMETER_TEXT));
             }
-
             running = savedInstanceState.getBoolean(KEY_CHRONOMETER_RUNNING);
             start_stop.setText(savedInstanceState.getString(KEY_BUTTON_TEXT));
 
@@ -86,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!running){
                     if(time == 0){
                         time = SystemClock.elapsedRealtime();
+                        timer.setBase(SystemClock.elapsedRealtime());
                     }
 
                     timer.setBase(SystemClock.elapsedRealtime() - time + timer.getBase());
